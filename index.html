@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Best Parts — Shop</title>
+<meta name="description" content="Tunnels and Mixed Feelings, de nieuwe plaat van Best Parts. Vinyl, cd en merch.">
+<link rel="preload" href="fonts/NeueKabel-ExtraBold.otf" as="font" type="font/otf" crossorigin>
+<link rel="preload" href="fonts/BDOGrotesk-Regular.otf" as="font" type="font/otf" crossorigin>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <a href="#" class="logo">Best<br>Parts</a>
+  <nav>
+    <a href="#shop">Shop</a>
+    <a href="#plaat">De plaat</a>
+    <a href="#live">Live</a>
+    <button class="cart-btn" type="button" aria-label="Winkelmandje openen">
+      Mandje <span class="cart-count">0</span>
+    </button>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO: lucht + hoes -->
+  <section class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Nieuwe plaat · BP003</p>
+      <h1>Tunnels and<br>Mixed Feelings</h1>
+      <p class="lead">Zes nieuwe songs, gemaakt in Gent. Nu op vinyl en cd, met merch op basis van de tekeningen uit de hoes.</p>
+      <a href="#shop" class="btn btn-red">Naar de shop</a>
+    </div>
+    <div class="hero-art">
+      <img src="img/cover-front.jpg" alt="Hoes van Tunnels and Mixed Feelings: een rode trein rijdt door een blauwe berg die in de lucht zweeft">
+    </div>
+  </section>
+
+  <!-- SHOP -->
+  <section class="shop" id="shop">
+    <div class="shop-head">
+      <h2>Shop</h2>
+      <p>Verzending in België of afhalen op een concert.</p>
+    </div>
+    <div class="grid" id="products"></div>
+  </section>
+
+  <!-- DE PLAAT: rode binnenhoes -->
+  <section class="record" id="plaat">
+    <div class="record-text">
+      <h2>De plaat</h2>
+      <ol class="tracks">
+        <li>Satellites</li>
+        <li>Trainride</li>
+        <li>Between the Silence</li>
+        <li>Tiny Degree</li>
+        <li>Ease my Mind</li>
+        <li>Regular Man</li>
+      </ol>
+      <p class="credits">Geschreven en opgenomen door Hans Gruyaert, Stijn Anseel &amp; Bertrand Lafontaine. Mix door Pieterjan Coppejans in Robot Studios, mastering door Frederik Dejongh bij Jerboa Mastering.</p>
+    </div>
+    <div class="record-art">
+      <img src="img/drawings.jpg" alt="Inkttekeningen uit de binnenhoes: een trein in een berg, een gitaarpedaal, boksers, een vliegtuig">
+    </div>
+  </section>
+  <!-- LIVE: gedane optredens -->
+  <section class="live" id="live">
+    <div class="live-head">
+      <h2>Live</h2>
+      <div class="live-stats"></div>
+    </div>
+    <div class="years" id="gigs"></div>
+    <p class="live-foot">Ons volgende optreden staat op <a href="https://www.songkick.com/artists/10209042-best-parts">Songkick</a> en <a href="https://instagram.com/bestpartsband">Instagram</a>.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <a href="#" class="logo">Best<br>Parts</a>
+  <div>
+    <a href="https://instagram.com/bestpartsband">Instagram</a>
+    <a href="https://bestparts.bandcamp.com">Bandcamp</a>
+  </div>
+  <p>Made in Gent, Belgium.<br>A splendid time is guaranteed for all.</p>
+</footer>
+
+<!-- MANDJE -->
+<div class="scrim" hidden></div>
+<aside class="cart" aria-label="Winkelmandje" aria-hidden="true">
+  <div class="cart-head">
+    <h2>Mandje</h2>
+    <button class="cart-close" type="button" aria-label="Sluiten">×</button>
+  </div>
+  <ul class="cart-items"></ul>
+  <p class="cart-empty">Je mandje is nog leeg.</p>
+  <div class="cart-foot">
+    <div class="row"><span>Subtotaal</span><span class="subtotal">€ 0</span></div>
+    <div class="row muted"><span>Verzending België</span><span class="shipping">€ 0</span></div>
+    <div class="row total"><span>Totaal</span><span class="grand">€ 0</span></div>
+    <button class="btn btn-red btn-block checkout" type="button">Afrekenen</button>
+    <p class="pay-note">Betalen met Bancontact, je bankapp of kaart.</p>
+  </div>
+</aside>
+
+<div class="toast" role="status" aria-live="polite"></div>
+
+<script src="shop.js"></script>
+<script src="gigs.js"></script>
+</body>
+</html>
