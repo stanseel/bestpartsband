@@ -10,7 +10,6 @@ const lp = (cover, alt) =>
 const PRODUCTS = [
   {
     id: "lp-tmf",
-    group: "records",
     name: "Tunnels and Mixed Feelings",
     sub: { nl: "Vinyl LP · 6 songs · 2026", en: "Vinyl LP · 6 songs · 2026" },
     price: 25,
@@ -22,7 +21,6 @@ const PRODUCTS = [
   },
   {
     id: "lp-montana",
-    group: "records",
     name: "Montana",
     sub: { nl: "Vinyl · 5 songs · 2024", en: "Vinyl · 5 songs · 2024" },
     price: 15,
@@ -34,7 +32,6 @@ const PRODUCTS = [
   },
   {
     id: "lp-best-parts",
-    group: "records",
     name: "Best Parts",
     sub: { nl: "Vinyl LP · 8 songs · 2022", en: "Vinyl LP · 8 songs · 2022" },
     price: 20,
@@ -45,22 +42,18 @@ const PRODUCTS = [
     art: lp("img/cover-best-parts.jpg", "Best Parts"),
   },
   {
-    id: "tee",
-    group: "merch",
-    name: "Boxers T-shirt",
-    sub: { nl: "Rood, zwarte print · bio-katoen", en: "Red, black print · organic cotton" },
+    id: "tee-italy",
+    name: { nl: "Italy Tour T-shirt", en: "Italy Tour T-shirt" },
+    sub: { nl: "Ecru, zwarte print op de rug", en: "Off-white, black print on the back" },
     price: 25,
     sizes: ["S", "M", "L", "XL", "XXL"],
-    stage: "blue",
-    thumb: "img/boxers.jpg",
-    art: `<div class="tee">
-      <svg viewBox="0 0 200 210" aria-hidden="true"><path fill="#e70029" d="M70 8c6 12 18 18 30 18s24-6 30-18l44 18 22 46-30 14-12-22v138H46V64L34 86 4 72l22-46z"/><path fill="none" stroke="#000" stroke-opacity=".18" stroke-width="2" d="M70 8c6 12 18 18 30 18s24-6 30-18"/></svg>
-      <img class="print ink" src="img/boxers.jpg" alt="Print: twee boksers">
-    </div>`,
+    stage: "photo",
+    thumb: "img/tee-italy-thumb.jpg",
+    art: `<img src="img/tee-italy.jpg" alt="Achterkant van het T-shirt: Best Parts, een paard met mensenbenen, Balliamo piano stanotte, Italy tour twenty six">`,
   },
   {
     id: "tote",
-    group: "merch",
+    hidden: true, // voorlopig niet in de shop: zet op false om hem terug te tonen
     name: { nl: "Plane totebag", en: "Plane tote bag" },
     sub: { nl: "Natuurkleurig canvas · 38 × 42 cm", en: "Natural canvas · 38 × 42 cm" },
     price: 15,
@@ -83,7 +76,7 @@ const { t, L } = I18N;
 // ---------- mandje (onthouden in deze browser) ----------
 let cart = [];
 try { cart = JSON.parse(localStorage.getItem("bp-cart")) || []; } catch {}
-cart = cart.filter((l) => PRODUCTS.some((p) => p.id === l.id)); // producten die niet meer bestaan weglaten
+cart = cart.filter((l) => PRODUCTS.some((p) => p.id === l.id && !p.hidden)); // producten die niet meer bestaan weglaten
 const save = () => { try { localStorage.setItem("bp-cart", JSON.stringify(cart)); } catch {} };
 
 const product = (id) => PRODUCTS.find((p) => p.id === id);
@@ -156,9 +149,7 @@ function renderProducts() {
     if (s) sizes[c.dataset.id] = s.textContent;
   });
 
-  $("#products").innerHTML = ["records", "merch"].map((g) => `
-    <h3 class="group-title">${t("shop." + g)}</h3>
-    <div class="grid">${PRODUCTS.filter((p) => p.group === g).map(card).join("")}</div>`).join("");
+  $("#products").innerHTML = `<div class="grid">${PRODUCTS.filter((p) => !p.hidden).map(card).join("")}</div>`;
 
   Object.entries(sizes).forEach(([id, size]) =>
     document.querySelectorAll(`.card[data-id="${id}"] .sizes button`).forEach((b) => b.setAttribute("aria-pressed", b.textContent === size))
