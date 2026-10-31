@@ -1,26 +1,52 @@
 // Producten. Prijzen en teksten zijn voorbeelden: pas ze hier aan.
 // Teksten die per taal verschillen staan als { nl: "...", en: "..." }.
+//
+// Voorraad bij de platen: "stock" is hoeveel er nog zijn, "edition" hoeveel er ooit gemaakt zijn.
+// Iets verkocht buiten de site (op een concert, via Bandcamp)? Verlaag "stock" hier.
+// Zonder "stock" toont de site geen teller. Bij 0 staat de plaat op uitverkocht.
+const lp = (cover, alt) =>
+  `<div class="lp"><div class="disc"></div><img src="${cover}" alt="${alt}"></div>`;
+
 const PRODUCTS = [
   {
-    id: "lp",
+    id: "lp-tmf",
+    group: "records",
     name: "Tunnels and Mixed Feelings",
-    sub: { nl: "Vinyl LP · 180 gram · met binnenhoes", en: "Vinyl LP · 180 gram · with inner sleeve" },
+    sub: { nl: "Vinyl LP · 6 songs · 2026", en: "Vinyl LP · 6 songs · 2026" },
     price: 25,
+    stock: 100,
+    edition: 100,
     stage: "blue",
     thumb: "img/cover-front.jpg",
-    art: `<div class="lp"><div class="disc"></div><img src="img/cover-front.jpg" alt="Vinylhoes"></div>`,
+    art: lp("img/cover-front.jpg", "Tunnels and Mixed Feelings"),
   },
   {
-    id: "cd",
-    name: "Tunnels and Mixed Feelings",
-    sub: "CD · digipack",
+    id: "lp-montana",
+    group: "records",
+    name: "Montana",
+    sub: { nl: "Vinyl · 5 songs · 2024", en: "Vinyl · 5 songs · 2024" },
     price: 15,
-    stage: "blue",
-    thumb: "img/cover-front.jpg",
-    art: `<div class="cd"><div class="disc"></div><div class="case"><img src="img/cover-front.jpg" alt="CD-hoes"></div></div>`,
+    stock: null, // nog in te vullen
+    edition: null,
+    stage: "orange",
+    thumb: "img/cover-montana.jpg",
+    art: lp("img/cover-montana.jpg", "Montana"),
+  },
+  {
+    id: "lp-best-parts",
+    group: "records",
+    name: "Best Parts",
+    sub: { nl: "Vinyl LP · 8 songs · 2022", en: "Vinyl LP · 8 songs · 2022" },
+    price: 20,
+    stock: null, // nog in te vullen
+    edition: null,
+    stage: "cream",
+    thumb: "img/cover-best-parts.jpg",
+    art: lp("img/cover-best-parts.jpg", "Best Parts"),
   },
   {
     id: "tee",
+    group: "merch",
     name: "Boxers T-shirt",
     sub: { nl: "Rood, zwarte print · bio-katoen", en: "Red, black print · organic cotton" },
     price: 25,
@@ -34,6 +60,7 @@ const PRODUCTS = [
   },
   {
     id: "tote",
+    group: "merch",
     name: { nl: "Plane totebag", en: "Plane tote bag" },
     sub: { nl: "Natuurkleurig canvas · 38 × 42 cm", en: "Natural canvas · 38 × 42 cm" },
     price: 15,
@@ -56,45 +83,86 @@ const { t, L } = I18N;
 // ---------- mandje (onthouden in deze browser) ----------
 let cart = [];
 try { cart = JSON.parse(localStorage.getItem("bp-cart")) || []; } catch {}
+cart = cart.filter((l) => PRODUCTS.some((p) => p.id === l.id)); // producten die niet meer bestaan weglaten
 const save = () => { try { localStorage.setItem("bp-cart", JSON.stringify(cart)); } catch {} };
 
+const product = (id) => PRODUCTS.find((p) => p.id === id);
+const hasStock = (p) => typeof p.stock === "number";
+const inCart = (id) => cart.filter((l) => l.id === id).reduce((n, l) => n + l.qty, 0);
+const left = (p) => (hasStock(p) ? Math.max(0, p.stock - inCart(p.id)) : Infinity);
+
 function add(id, size) {
+  const p = product(id);
+  if (left(p) <= 0) return toast(p.stock === 0 ? t("stock.soldOut") : t("stock.max", { n: p.stock }));
   const key = id + (size ? "-" + size : "");
   const line = cart.find((l) => l.key === key);
   if (line) line.qty++;
   else cart.push({ key, id, size, qty: 1 });
   save();
   render();
+  renderProducts();
   const c = $(".cart-count");
   c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
-  const p = PRODUCTS.find((p) => p.id === id);
   toast(t("shop.added", { name: L(p.name) + (size ? " (" + size + ")" : "") }));
 }
 
 function changeQty(key, d) {
   const line = cart.find((l) => l.key === key);
   if (!line) return;
+  if (d > 0 && left(product(line.id)) <= 0) return toast(t("stock.max", { n: product(line.id).stock }));
   line.qty += d;
   if (line.qty <= 0) cart = cart.filter((l) => l !== line);
   save();
   render();
+  renderProducts();
 }
 
 // ---------- producten tonen ----------
-function renderProducts() {
-  $("#products").innerHTML = PRODUCTS.map((p) => `
-    <article class="card" data-id="${p.id}">
+function stockBadge(p) {
+  if (!hasStock(p)) return "";
+  const pct = p.edition ? Math.round((p.stock / p.edition) * 100) : 100;
+  const low = p.stock > 0 && p.stock <= 10;
+  const label = p.stock === 0 ? t("stock.soldOut")
+    : p.edition ? t("stock.leftOf", { n: p.stock, total: p.edition })
+    : t("stock.left", { n: p.stock });
+  return `<div class="stock${low ? " low" : ""}${p.stock === 0 ? " out" : ""}">
+      <div class="stock-bar"><span style="width:${pct}%"></span></div>
+      <span class="stock-label">${label}${low ? " · " + t("stock.low") : ""}</span>
+    </div>`;
+}
+
+function card(p) {
+  const soldOut = hasStock(p) && p.stock === 0;
+  return `
+    <article class="card${soldOut ? " sold-out" : ""}" data-id="${p.id}">
       <div class="stage ${p.stage}">${p.art}</div>
       <div class="card-body">
         <h3>${L(p.name)}</h3>
         <p class="sub">${L(p.sub)}</p>
         <p class="price">${euro(p.price)}</p>
+        ${stockBadge(p)}
         <div class="card-actions">
           ${p.sizes ? `<div class="sizes" role="group" aria-label="${t("shop.size")}">${p.sizes.map((s) => `<button type="button" aria-pressed="${s === "M"}">${s}</button>`).join("")}</div>` : ""}
-          <button class="btn btn-ink add" type="button">${t("shop.add")}</button>
+          <button class="btn btn-ink add" type="button"${soldOut ? " disabled" : ""}>${soldOut ? t("stock.soldOut") : t("shop.add")}</button>
         </div>
       </div>
-    </article>`).join("");
+    </article>`;
+}
+
+function renderProducts() {
+  const sizes = {};
+  document.querySelectorAll(".card").forEach((c) => {
+    const s = c.querySelector('.sizes [aria-pressed="true"]');
+    if (s) sizes[c.dataset.id] = s.textContent;
+  });
+
+  $("#products").innerHTML = ["records", "merch"].map((g) => `
+    <h3 class="group-title">${t("shop." + g)}</h3>
+    <div class="grid">${PRODUCTS.filter((p) => p.group === g).map(card).join("")}</div>`).join("");
+
+  Object.entries(sizes).forEach(([id, size]) =>
+    document.querySelectorAll(`.card[data-id="${id}"] .sizes button`).forEach((b) => b.setAttribute("aria-pressed", b.textContent === size))
+  );
 
   document.querySelectorAll(".card").forEach((card) => {
     card.querySelectorAll(".sizes button").forEach((b) =>
@@ -112,7 +180,7 @@ function renderProducts() {
 // ---------- mandje tonen ----------
 function render() {
   const count = cart.reduce((n, l) => n + l.qty, 0);
-  const subtotal = cart.reduce((n, l) => n + l.qty * PRODUCTS.find((p) => p.id === l.id).price, 0);
+  const subtotal = cart.reduce((n, l) => n + l.qty * product(l.id).price, 0);
   const shipping = subtotal === 0 || subtotal >= FREE_FROM ? 0 : SHIPPING;
 
   $(".cart-count").textContent = count;
@@ -123,7 +191,7 @@ function render() {
   $(".grand").textContent = euro(subtotal + shipping);
 
   $(".cart-items").innerHTML = cart.map((l) => {
-    const p = PRODUCTS.find((p) => p.id === l.id);
+    const p = product(l.id);
     return `<li>
       <div class="thumb"><img src="${p.thumb}" alt=""></div>
       <div>
