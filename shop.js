@@ -1,9 +1,10 @@
 // Producten. Prijzen en teksten zijn voorbeelden: pas ze hier aan.
+// Teksten die per taal verschillen staan als { nl: "...", en: "..." }.
 const PRODUCTS = [
   {
     id: "lp",
     name: "Tunnels and Mixed Feelings",
-    sub: "Vinyl LP · 180 gram · met binnenhoes",
+    sub: { nl: "Vinyl LP · 180 gram · met binnenhoes", en: "Vinyl LP · 180 gram · with inner sleeve" },
     price: 25,
     stage: "blue",
     thumb: "img/cover-front.jpg",
@@ -21,7 +22,7 @@ const PRODUCTS = [
   {
     id: "tee",
     name: "Boxers T-shirt",
-    sub: "Rood, zwarte print · bio-katoen",
+    sub: { nl: "Rood, zwarte print · bio-katoen", en: "Red, black print · organic cotton" },
     price: 25,
     sizes: ["S", "M", "L", "XL", "XXL"],
     stage: "blue",
@@ -33,8 +34,8 @@ const PRODUCTS = [
   },
   {
     id: "tote",
-    name: "Plane totebag",
-    sub: "Natuurkleurig canvas · 38 × 42 cm",
+    name: { nl: "Plane totebag", en: "Plane tote bag" },
+    sub: { nl: "Natuurkleurig canvas · 38 × 42 cm", en: "Natural canvas · 38 × 42 cm" },
     price: 15,
     stage: "red",
     thumb: "img/plane.jpg",
@@ -50,6 +51,7 @@ const FREE_FROM = 50; // gratis verzending vanaf dit bedrag
 
 const euro = (n) => "€ " + (Number.isInteger(n) ? n : n.toFixed(2).replace(".", ","));
 const $ = (s) => document.querySelector(s);
+const { t, L } = I18N;
 
 // ---------- mandje (onthouden in deze browser) ----------
 let cart = [];
@@ -66,7 +68,7 @@ function add(id, size) {
   const c = $(".cart-count");
   c.classList.remove("bump"); void c.offsetWidth; c.classList.add("bump");
   const p = PRODUCTS.find((p) => p.id === id);
-  toast(`${p.name}${size ? " (" + size + ")" : ""} zit in je mandje`);
+  toast(t("shop.added", { name: L(p.name) + (size ? " (" + size + ")" : "") }));
 }
 
 function changeQty(key, d) {
@@ -84,12 +86,12 @@ function renderProducts() {
     <article class="card" data-id="${p.id}">
       <div class="stage ${p.stage}">${p.art}</div>
       <div class="card-body">
-        <h3>${p.name}</h3>
-        <p class="sub">${p.sub}</p>
+        <h3>${L(p.name)}</h3>
+        <p class="sub">${L(p.sub)}</p>
         <p class="price">${euro(p.price)}</p>
         <div class="card-actions">
-          ${p.sizes ? `<div class="sizes" role="group" aria-label="Maat">${p.sizes.map((s) => `<button type="button" aria-pressed="${s === "M"}">${s}</button>`).join("")}</div>` : ""}
-          <button class="btn btn-ink add" type="button">In mandje</button>
+          ${p.sizes ? `<div class="sizes" role="group" aria-label="${t("shop.size")}">${p.sizes.map((s) => `<button type="button" aria-pressed="${s === "M"}">${s}</button>`).join("")}</div>` : ""}
+          <button class="btn btn-ink add" type="button">${t("shop.add")}</button>
         </div>
       </div>
     </article>`).join("");
@@ -117,7 +119,7 @@ function render() {
   $(".cart-empty").hidden = count > 0;
   $(".cart-foot").hidden = count === 0;
   $(".subtotal").textContent = euro(subtotal);
-  $(".shipping").textContent = shipping ? euro(shipping) : "gratis";
+  $(".shipping").textContent = shipping ? euro(shipping) : t("cart.free");
   $(".grand").textContent = euro(subtotal + shipping);
 
   $(".cart-items").innerHTML = cart.map((l) => {
@@ -125,12 +127,12 @@ function render() {
     return `<li>
       <div class="thumb"><img src="${p.thumb}" alt=""></div>
       <div>
-        <div class="name">${p.name}</div>
-        <div class="meta">${p.sub.split(" · ")[0]}${l.size ? " · maat " + l.size : ""}</div>
+        <div class="name">${L(p.name)}</div>
+        <div class="meta">${L(p.sub).split(" · ")[0]}${l.size ? " · " + t("cart.size") + " " + l.size : ""}</div>
         <div class="qty">
-          <button type="button" data-key="${l.key}" data-d="-1" aria-label="Eén minder">−</button>
+          <button type="button" data-key="${l.key}" data-d="-1" aria-label="${t("cart.less")}">−</button>
           <span>${l.qty}</span>
-          <button type="button" data-key="${l.key}" data-d="1" aria-label="Eén meer">+</button>
+          <button type="button" data-key="${l.key}" data-d="1" aria-label="${t("cart.more")}">+</button>
         </div>
       </div>
       <div class="line">${euro(l.qty * p.price)}</div>
@@ -157,7 +159,7 @@ document.addEventListener("keydown", (e) => e.key === "Escape" && openCart(false
 // ---------- afrekenen ----------
 // Demo: hier komt later de koppeling met Stripe of Mollie.
 $(".checkout").addEventListener("click", () => {
-  toast("Demo: betalen wordt later gekoppeld aan Stripe of Mollie.");
+  toast(t("cart.demo"));
 });
 
 let toastTimer;
@@ -171,3 +173,4 @@ function toast(msg) {
 
 renderProducts();
 render();
+document.addEventListener("langchange", () => { renderProducts(); render(); });

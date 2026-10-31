@@ -55,6 +55,12 @@ h1, h2, h3 { font-family: var(--head); font-weight: 800; letter-spacing: -0.02em
 .top nav { display: flex; gap: clamp(12px, 3vw, 32px); align-items: center; font-size: .95rem; font-weight: 500; }
 .top nav a { text-decoration: none; }
 .top nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.lang { display: inline-flex; border: 1.5px solid rgba(255, 255, 255, .7); border-radius: 999px; padding: 2px; }
+.lang button {
+  font: 600 .8rem var(--body); letter-spacing: .04em; color: var(--white); cursor: pointer;
+  background: none; border: 0; border-radius: 999px; padding: 7px 10px; line-height: 1;
+}
+.lang button[aria-pressed="true"] { background: var(--white); color: var(--sky-top); }
 .cart-btn {
   font: inherit; color: var(--white); cursor: pointer;
   background: var(--red); border: 0; border-radius: 999px;

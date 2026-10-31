@@ -15,10 +15,14 @@
   <a href="#" class="logo">Best<br>Parts</a>
   <nav>
     <a href="#shop">Shop</a>
-    <a href="#plaat">De plaat</a>
+    <a href="#plaat" data-i18n="nav.record">De plaat</a>
     <a href="#live">Live</a>
-    <button class="cart-btn" type="button" aria-label="Winkelmandje openen">
-      Mandje <span class="cart-count">0</span>
+    <div class="lang" role="group" aria-label="Taal" data-i18n-label="nav.lang">
+      <button type="button" data-lang="nl" aria-pressed="true">NL</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <button class="cart-btn" type="button" aria-label="Winkelmandje openen" data-i18n-label="nav.cartOpen">
+      <span data-i18n="nav.cart">Mandje</span> <span class="cart-count">0</span>
     </button>
   </nav>
 </header>
@@ -27,13 +31,13 @@
   <!-- HERO: lucht + hoes -->
   <section class="hero">
     <div class="hero-text">
-      <p class="eyebrow">Nieuwe plaat · BP003</p>
+      <p class="eyebrow" data-i18n="hero.eyebrow">Nieuwe plaat · BP003</p>
       <h1>Tunnels and<br>Mixed Feelings</h1>
-      <p class="lead">Zes nieuwe songs, gemaakt in Gent. Nu op vinyl en cd, met merch op basis van de tekeningen uit de hoes.</p>
-      <a href="#shop" class="btn btn-red">Naar de shop</a>
+      <p class="lead" data-i18n="hero.lead">Zes nieuwe songs, gemaakt in Gent. Nu op vinyl en cd, met merch op basis van de tekeningen uit de hoes.</p>
+      <a href="#shop" class="btn btn-red" data-i18n="hero.cta">Naar de shop</a>
     </div>
     <div class="hero-art">
-      <img src="img/cover-front.jpg" alt="Hoes van Tunnels and Mixed Feelings: een rode trein rijdt door een blauwe berg die in de lucht zweeft">
+      <img src="img/cover-front.jpg" data-i18n-alt="hero.alt" alt="Hoes van Tunnels and Mixed Feelings: een rode trein rijdt door een blauwe berg die in de lucht zweeft">
     </div>
   </section>
 
@@ -41,7 +45,7 @@
   <section class="shop" id="shop">
     <div class="shop-head">
       <h2>Shop</h2>
-      <p>Verzending in België of afhalen op een concert.</p>
+      <p data-i18n="shop.note">Verzending in België of afhalen op een concert.</p>
     </div>
     <div class="grid" id="products"></div>
   </section>
@@ -49,7 +53,7 @@
   <!-- DE PLAAT: rode binnenhoes -->
   <section class="record" id="plaat">
     <div class="record-text">
-      <h2>De plaat</h2>
+      <h2 data-i18n="record.title">De plaat</h2>
       <ol class="tracks">
         <li>Satellites</li>
         <li>Trainride</li>
@@ -58,12 +62,13 @@
         <li>Ease my Mind</li>
         <li>Regular Man</li>
       </ol>
-      <p class="credits">Geschreven en opgenomen door Hans Gruyaert, Stijn Anseel &amp; Bertrand Lafontaine. Mix door Pieterjan Coppejans in Robot Studios, mastering door Frederik Dejongh bij Jerboa Mastering.</p>
+      <p class="credits" data-i18n="record.credits">Geschreven en opgenomen door Hans Gruyaert, Stijn Anseel &amp; Bertrand Lafontaine. Mix door Pieterjan Coppejans in Robot Studios, mastering door Frederik Dejongh bij Jerboa Mastering.</p>
     </div>
     <div class="record-art">
-      <img src="img/drawings.jpg" alt="Inkttekeningen uit de binnenhoes: een trein in een berg, een gitaarpedaal, boksers, een vliegtuig">
+      <img src="img/drawings.jpg" data-i18n-alt="record.alt" alt="Inkttekeningen uit de binnenhoes: een trein in een berg, een gitaarpedaal, boksers, een vliegtuig">
     </div>
   </section>
+
   <!-- LIVE: gedane optredens -->
   <section class="live" id="live">
     <div class="live-head">
@@ -71,7 +76,7 @@
       <div class="live-stats"></div>
     </div>
     <div class="years" id="gigs"></div>
-    <p class="live-foot">Ons volgende optreden staat op <a href="https://www.songkick.com/artists/10209042-best-parts">Songkick</a> en <a href="https://instagram.com/bestpartsband">Instagram</a>.</p>
+    <p class="live-foot" data-i18n="live.foot">Ons volgende optreden staat op <a href="https://www.songkick.com/artists/10209042-best-parts">Songkick</a> en <a href="https://instagram.com/bestpartsband">Instagram</a>.</p>
   </section>
 </main>
 
@@ -86,24 +91,25 @@
 
 <!-- MANDJE -->
 <div class="scrim" hidden></div>
-<aside class="cart" aria-label="Winkelmandje" aria-hidden="true">
+<aside class="cart" aria-label="Winkelmandje" data-i18n-label="cart.label" aria-hidden="true">
   <div class="cart-head">
-    <h2>Mandje</h2>
-    <button class="cart-close" type="button" aria-label="Sluiten">×</button>
+    <h2 data-i18n="cart.title">Mandje</h2>
+    <button class="cart-close" type="button" aria-label="Sluiten" data-i18n-label="cart.close">×</button>
   </div>
   <ul class="cart-items"></ul>
-  <p class="cart-empty">Je mandje is nog leeg.</p>
+  <p class="cart-empty" data-i18n="cart.empty">Je mandje is nog leeg.</p>
   <div class="cart-foot">
-    <div class="row"><span>Subtotaal</span><span class="subtotal">€ 0</span></div>
-    <div class="row muted"><span>Verzending België</span><span class="shipping">€ 0</span></div>
-    <div class="row total"><span>Totaal</span><span class="grand">€ 0</span></div>
-    <button class="btn btn-red btn-block checkout" type="button">Afrekenen</button>
-    <p class="pay-note">Betalen met Bancontact, je bankapp of kaart.</p>
+    <div class="row"><span data-i18n="cart.subtotal">Subtotaal</span><span class="subtotal">€ 0</span></div>
+    <div class="row muted"><span data-i18n="cart.shipping">Verzending België</span><span class="shipping">€ 0</span></div>
+    <div class="row total"><span data-i18n="cart.total">Totaal</span><span class="grand">€ 0</span></div>
+    <button class="btn btn-red btn-block checkout" type="button" data-i18n="cart.checkout">Afrekenen</button>
+    <p class="pay-note" data-i18n="cart.payNote">Betalen met Bancontact, je bankapp of kaart.</p>
   </div>
 </aside>
 
 <div class="toast" role="status" aria-live="polite"></div>
 
+<script src="i18n.js"></script>
 <script src="shop.js"></script>
 <script src="gigs.js"></script>
 </body>
