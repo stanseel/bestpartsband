@@ -1,13 +1,11 @@
-// Boekingsaanvraag: het formulier wordt via FormSubmit doorgestuurd naar de band.
-// De adressen staan in stukjes zodat adresverzamelaars ze niet zomaar uit de code plukken.
+// Boekingsaanvraag: het formulier wordt via Web3Forms doorgestuurd naar de mailbox van de band.
+// De sleutel hieronder mag openbaar zijn; er staat geen e-mailadres in de code.
 (() => {
   const { t } = I18N;
   const form = document.querySelector(".booking-form");
   if (!form) return;
 
-  const at = (name, domain) => name + "@" + domain;
-  const TO = at("hansgruyaert", "telenet.be"); // na activatie te vervangen door de code die FormSubmit opstuurt
-  const CC = at("stijn", "stans.be");
+  const ACCESS_KEY = "214bb089-49a6-48bf-bbab-867059800293";
   const status = form.querySelector(".booking-status");
   const button = form.querySelector("button");
   let state = ""; // sleutel van de melding die getoond wordt, zodat ze mee vertaalt
@@ -19,27 +17,26 @@
     e.preventDefault();
     if (!form.checkValidity()) return show("booking.missing");
     const data = Object.fromEntries(new FormData(form));
-    if (data._honey) return; // ingevuld door een robot
+    if (data.botcheck) return; // ingevuld door een robot
 
     button.disabled = true;
     show("booking.sending");
     try {
-      const res = await fetch("https://formsubmit.co/ajax/" + TO, {
+      const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          Naam: data.name,
+          access_key: ACCESS_KEY,
+          subject: "Boekingsaanvraag Best Parts: " + data.name,
+          from_name: "Best Parts website",
+          name: data.name,
           email: data.email,
           "Datum en plaats": data.when,
-          Bericht: data.message,
-          _cc: CC,
-          _subject: "Boekingsaanvraag Best Parts: " + data.name,
-          _template: "table",
-          _captcha: "false",
+          message: data.message,
         }),
       });
       const out = await res.json();
-      if (!res.ok || String(out.success) !== "true") throw new Error(out.message || res.status);
+      if (!res.ok || !out.success) throw new Error(out.message || res.status);
       form.classList.add("sent");
       show("booking.thanks");
     } catch (err) {
