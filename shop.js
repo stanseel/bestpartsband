@@ -4,7 +4,7 @@
 // Voorraad bij de platen: "stock" is hoeveel er nog zijn, "edition" hoeveel er ooit gemaakt zijn.
 // De echte aantallen staan in stock.json en pas je aan via admin.html.
 // De getallen hieronder zijn alleen een reserve als stock.json niet laadt.
-// Zonder "stock" toont de site geen teller. Bij 0 staat de plaat op uitverkocht.
+// De site toont geen teller; bij 0 staat de plaat op uitverkocht.
 const lp = (cover, alt) =>
   `<div class="lp"><div class="disc"></div><img src="${cover}" alt="${alt}"></div>`;
 
@@ -112,17 +112,10 @@ function changeQty(key, d) {
 }
 
 // ---------- producten tonen ----------
+// Geen teller op de site: alleen een vermelding als een product uitverkocht is
 function stockBadge(p) {
-  if (!hasStock(p)) return "";
-  const pct = p.edition ? Math.round((p.stock / p.edition) * 100) : 100;
-  const low = p.stock > 0 && p.stock <= 10;
-  const label = p.stock === 0 ? t("stock.soldOut")
-    : p.edition ? t("stock.leftOf", { n: p.stock, total: p.edition })
-    : t("stock.left", { n: p.stock });
-  return `<div class="stock${low ? " low" : ""}${p.stock === 0 ? " out" : ""}">
-      <div class="stock-bar"><span style="width:${pct}%"></span></div>
-      <span class="stock-label">${label}${low ? " · " + t("stock.low") : ""}</span>
-    </div>`;
+  if (!hasStock(p) || p.stock > 0) return "";
+  return `<p class="sold-out-note">${t("stock.soldOut")}</p>`;
 }
 
 function card(p) {

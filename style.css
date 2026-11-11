@@ -137,15 +137,13 @@ h1, h2, h3 { font-family: var(--head); font-weight: 800; letter-spacing: var(--k
 .stage.orange { background: var(--grain), #c94512; background-blend-mode: soft-light, normal; }
 .stage.cream { background: var(--grain), #e3d9c6; background-blend-mode: multiply, normal; }
 
-/* voorraadteller */
-.stock { margin-top: 10px; display: grid; gap: 7px; }
-.stock-bar { height: 6px; border-radius: 999px; background: #ddd5c8; overflow: hidden; }
-.stock-bar span { display: block; height: 100%; background: var(--ink); border-radius: inherit; transition: width .6s ease; }
-.stock-label { font-size: .85rem; font-weight: 500; }
-.stock.low .stock-bar span { background: var(--red); }
-.stock.low .stock-label { color: var(--red); }
+/* uitverkocht */
+.sold-out-note {
+  justify-self: start; width: fit-content; margin: 10px 0 0;
+  font-size: .8rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--white); background: var(--red); border-radius: 999px; padding: 5px 11px;
+}
 .sold-out .stage { filter: grayscale(.7); opacity: .7; }
-.sold-out .stock-label { color: #888; }
 .add:disabled { background: #bbb; cursor: not-allowed; transform: none; }
 .card-body { padding: 18px 2px 0; display: flex; flex-direction: column; gap: 6px; flex: 1; }
 .card h3 { font-size: 1.45rem; }
