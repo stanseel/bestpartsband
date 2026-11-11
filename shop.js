@@ -24,7 +24,7 @@ const PRODUCTS = [
     id: "lp-montana",
     name: "Montana",
     sub: { nl: "Vinyl · 5 songs · 2024", en: "Vinyl · 5 songs · 2024" },
-    price: 15,
+    price: 20,
     stock: null, // nog in te vullen
     edition: null,
     stage: "orange",
