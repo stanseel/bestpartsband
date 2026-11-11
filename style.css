@@ -378,7 +378,9 @@ body.cart-open { overflow: hidden; }
 .qty button { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid #bbb; background: none; cursor: pointer; font: 500 .9rem var(--body); }
 .qty span { min-width: 20px; text-align: center; font-size: .9rem; }
 .cart-items .line { font-weight: 600; }
-.cart-empty { padding: 0 24px; color: #666; }
+.cart-items:empty { display: none; }
+.cart-empty { flex: 1; margin: 0; padding: 56px 24px 0; text-align: center; color: #666; }
+.cart-empty strong { display: block; font: 800 1.7rem/1 var(--head); letter-spacing: var(--kabel-tight); color: var(--ink); margin-bottom: 10px; }
 .cart-foot { padding: 20px 24px 28px; border-top: 1.5px solid var(--ink); }
 .delivery { display: block; margin-bottom: 14px; }
 .delivery span { display: block; font-size: .85rem; font-weight: 600; margin-bottom: 6px; }
