@@ -12,7 +12,7 @@ const PRODUCTS = [
   {
     id: "lp-tmf",
     name: "Tunnels and Mixed Feelings",
-    sub: { nl: "Vinyl LP · 6 songs · 2026", en: "Vinyl LP · 6 songs · 2026" },
+    sub: { nl: "Gatefold Vinyl LP · 6 songs · 2026", en: "Gatefold Vinyl LP · 6 songs · 2026" },
     price: 25,
     stock: 100,
     edition: 100,
