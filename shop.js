@@ -202,12 +202,20 @@ $(".cart-items").addEventListener("click", (e) => {
 function openCart(open) {
   $(".cart").classList.toggle("open", open);
   $(".cart").setAttribute("aria-hidden", !open);
+  $(".cart").inert = !open;
   $(".scrim").hidden = !open;
+  document.body.classList.toggle("cart-open", open);
+  (open ? $(".cart-close") : $(".cart-btn")).focus({ preventScroll: true });
+}
+
+// Mandje blijft bereikbaar: zodra de kop uit beeld scrolt, zweeft de knop rechtsboven
+if ("IntersectionObserver" in window) {
+  new IntersectionObserver(([e]) => $(".cart-btn").classList.toggle("float", !e.isIntersecting)).observe($(".top"));
 }
 $(".cart-btn").addEventListener("click", () => openCart(true));
 $(".cart-close").addEventListener("click", () => openCart(false));
 $(".scrim").addEventListener("click", () => openCart(false));
-document.addEventListener("keydown", (e) => e.key === "Escape" && openCart(false));
+document.addEventListener("keydown", (e) => e.key === "Escape" && $(".cart").classList.contains("open") && openCart(false));
 
 // ---------- afrekenen ----------
 // Demo: hier komt later de koppeling met Stripe of Mollie.
