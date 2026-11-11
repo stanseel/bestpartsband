@@ -102,7 +102,7 @@ const PRODUCTS = [
 // Levering: prijs per bestelling. Pas de bedragen hier aan.
 // "freeFrom" = gratis verzending vanaf dit bestelbedrag (alleen België).
 const DELIVERY = {
-  be: { price: 5, freeFrom: 50 },
+  be: { price: 8, freeFrom: 50 },
   pickup: { price: 0 },
   near: { price: 12 }, // Nederland, Luxemburg, Duitsland, Frankrijk
   europe: { price: 18 },
