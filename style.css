@@ -211,7 +211,12 @@ body.cart-open { overflow: hidden; }
   transition: opacity .3s ease, transform .4s cubic-bezier(.2, .7, .2, 1);
 }
 .tee-view image { mix-blend-mode: multiply; opacity: .93; }
-.stage[data-view="back"] .tee-front, .stage[data-view="front"] .tee-back { opacity: 0; transform: scale(.96); }
+.stage[data-view="back"] .tee-front, .stage[data-view="front"] .tee-back, .stage[data-view="photo"] .tee-view { opacity: 0; transform: scale(.96); }
+/* foto van het gedragen T-shirt, als derde weergave */
+.tee-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .3s ease; }
+.stage[data-view="photo"] .tee-photo { opacity: 1; }
+.views, .zoom-btn { z-index: 1; }
+.stage[data-view="photo"] .views, .stage[data-view="photo"] .zoom-btn { background: rgba(17, 17, 17, .55); }
 .views {
   position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%);
   display: inline-flex; padding: 2px; border-radius: 999px; background: rgba(17, 17, 17, .28);
@@ -236,6 +241,7 @@ body.cart-open { overflow: hidden; }
 @keyframes zoom-in { from { opacity: 0; transform: scale(.94); } }
 .zoom-stage { width: min(92vw, 86vh, 860px); aspect-ratio: 1; border-radius: 6px; cursor: default; }
 .zoom-stage .tee { margin-top: -4%; }
+.zoom-stage .tee-photo { object-position: 50% 15%; border-radius: 6px; }
 .zoom-stage .views { bottom: 22px; }
 .zoom-stage .views button { font-size: .9rem; padding: 9px 16px; }
 .zoom-close {

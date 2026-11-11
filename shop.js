@@ -25,8 +25,8 @@ const tee = (side, uid = "") => {
     <path d="M152 196 C150 290 149 390 148 484 L452 484 C451 390 450 290 448 196Z" fill="url(#tee-fold-${side}${uid})"/>
     <path d="M152 196 L128 92 M448 196 L472 92" stroke="#000" stroke-opacity=".08" stroke-width="2" fill="none"/>
     <path d="M38 209 L108 249 M562 209 L492 249 M149 470 L451 470" stroke="#000" stroke-opacity=".13" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
-    <path d="M368 52 ${neck}" stroke="#e4ddcb" stroke-width="13" fill="none" stroke-linecap="round"/>
-    <path d="M368 52 ${neck}" stroke="#000" stroke-opacity=".12" stroke-width="1.5" fill="none" transform="translate(0 7)"/>
+    <path d="M368 52 ${neck}" stroke="#ebe5d6" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M368 52 ${neck}" stroke="#000" stroke-opacity=".1" stroke-width="1.2" fill="none" transform="translate(0 4)"/>
     ${back
       ? `<image href="img/tee-print-back.png" x="203" y="128" width="194" height="274"/>`
       : `<image href="img/tee-print-front.png" x="352" y="168" width="76" height="57"/>`}
@@ -76,13 +76,13 @@ const PRODUCTS = [
     stage: "red",
     thumb: "img/tee-print-back.png",
     thumbFit: true,
-    views: ["back", "front"],
+    views: ["back", "front", "photo"],
     alt: {
       nl: "Ecru T-shirt. Achterkant: Best Parts, een paard met mensenbenen, Balliamo piano stanotte, Italy tour twenty six. Voorkant: klein Best Parts-logo op de borst.",
       en: "Off-white T-shirt. Back: Best Parts, a horse with human legs, Balliamo piano stanotte, Italy tour twenty six. Front: small Best Parts logo on the chest.",
     },
-    art: `<div class="tee">${tee("back")}${tee("front")}</div>`,
-    zoom: `<div class="tee">${tee("back", "-zoom")}${tee("front", "-zoom")}</div>`,
+    art: `<div class="tee">${tee("back")}${tee("front")}</div><img class="tee-photo" src="img/tee-italy.jpg" alt="" loading="lazy">`,
+    zoom: `<div class="tee">${tee("back", "-zoom")}${tee("front", "-zoom")}</div><img class="tee-photo" src="img/tee-italy.jpg" alt="" loading="lazy">`,
   },
   {
     id: "tote",
