@@ -150,7 +150,7 @@ h1, h2, h3 { font-family: var(--head); font-weight: 800; letter-spacing: var(--k
 .card .sub { color: #666; font-size: .92rem; margin: 0; }
 .card .price { font-family: var(--head); font-weight: 700; font-size: 1.3rem; margin: 6px 0 0; }
 .card-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 14px; flex-wrap: wrap; }
-.sizes { display: flex; gap: 6px; flex-wrap: wrap; width: 100%; }
+.sizes { display: flex; gap: 6px; flex-wrap: wrap; width: 100%; margin-bottom: 10px; }
 .sizes button {
   font: 500 .85rem var(--body); cursor: pointer;
   min-width: 40px; height: 36px; border-radius: 999px;
