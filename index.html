@@ -86,6 +86,25 @@
     </div>
     <div class="years" id="gigs"></div>
     <p class="live-foot" data-i18n="live.foot">Ons volgende optreden staat op <a href="https://www.songkick.com/artists/10209042-best-parts">Songkick</a> en <a href="https://instagram.com/bestpartsband">Instagram</a>.</p>
+
+    <!-- BOEKEN: aanvraagformulier, verstuurd via booking.js -->
+    <div class="booking" id="boeken">
+      <div class="booking-text">
+        <h3 data-i18n="booking.title">Boek ons</h3>
+        <p data-i18n="booking.lead">Best Parts op je podium, festival of in je café? Laat weten waar en wanneer, dan nemen we snel contact op.</p>
+      </div>
+      <form class="booking-form" novalidate>
+        <label><span data-i18n="booking.name">Naam</span><input type="text" name="name" autocomplete="name" required></label>
+        <label><span data-i18n="booking.email">E-mailadres</span><input type="email" name="email" autocomplete="email" required></label>
+        <label class="wide"><span data-i18n="booking.when">Datum en plaats</span><input type="text" name="when"></label>
+        <label class="wide"><span data-i18n="booking.message">Bericht</span><textarea name="message" rows="4" required></textarea></label>
+        <input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="booking-foot wide">
+          <button class="btn btn-red" type="submit" data-i18n="booking.send">Verstuur aanvraag</button>
+          <p class="booking-status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+    </div>
   </section>
 </main>
 
@@ -124,5 +143,6 @@
 <script src="shop.js"></script>
 <script src="gigs.js"></script>
 <script src="player.js"></script>
+<script src="booking.js"></script>
 </body>
 </html>

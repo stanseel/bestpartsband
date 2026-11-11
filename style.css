@@ -314,6 +314,32 @@ body.cart-open { overflow: hidden; }
 }
 .live-foot { margin: 16px 0 0; font-size: .92rem; opacity: .85; }
 
+/* boekingsformulier onderaan de live-sectie */
+.booking {
+  display: grid; grid-template-columns: 1fr 1.3fr; gap: clamp(28px, 6vw, 96px);
+  margin-top: clamp(48px, 7vw, 88px); padding-top: clamp(40px, 5vw, 64px);
+  border-top: 2px solid var(--white);
+}
+.booking h3 { font-size: clamp(2.4rem, 5vw, 4rem); }
+.booking-text p { max-width: 34ch; line-height: 1.5; margin: 20px 0 0; opacity: .92; }
+.booking-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.booking-form .wide { grid-column: 1 / -1; }
+.booking-form label span { display: block; font-size: .85rem; font-weight: 500; margin-bottom: 6px; }
+.booking-form input, .booking-form textarea {
+  width: 100%; font: 400 1rem var(--body); color: var(--white);
+  background: rgba(255, 255, 255, .1); border: 1.5px solid rgba(255, 255, 255, .55); border-radius: 6px;
+  padding: 12px 14px;
+}
+.booking-form textarea { resize: vertical; min-height: 110px; }
+.booking-form input:focus-visible, .booking-form textarea:focus-visible { outline: 2.5px solid var(--white); outline-offset: 1px; border-color: var(--white); }
+.booking-form .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.booking-foot { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.booking-form .btn-red:focus-visible { outline-color: var(--white); }
+.booking-form button:disabled { opacity: .6; cursor: default; transform: none; }
+.booking-status { margin: 0; font-size: .95rem; flex: 1; min-width: 200px; }
+.booking-form.sent > :not(.booking-foot), .booking-form.sent button { display: none; }
+.booking-form.sent .booking-status { font: 700 1.5rem/1.2 var(--head); letter-spacing: var(--kabel-tight); }
+
 /* ---------- footer ---------- */
 .foot {
   background: var(--ink); color: var(--white);
@@ -376,11 +402,13 @@ body.cart-open { overflow: hidden; }
   .hero { grid-template-columns: 1fr; padding-top: 120px; gap: 40px; min-height: 0; }
   .hero-art img { max-width: 420px; margin: 0 auto; }
   .record { grid-template-columns: 1fr; }
+  .booking { grid-template-columns: 1fr; }
   .grid { gap: 28px 14px; }
   .card h3 { font-size: 1.15rem; }
 }
 @media (max-width: 480px) {
   .grid { grid-template-columns: 1fr; }
+  .booking-form { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
