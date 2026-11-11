@@ -3,7 +3,7 @@
 const STRINGS = {
   nl: {
     "meta.description": "Tunnels and Mixed Feelings, de nieuwe plaat van Best Parts. Vinyl en merch.",
-    "nav.record": "De plaat",
+    "nav.record": "Listening corner",
     "nav.cart": "Mandje",
     "nav.cartOpen": "Winkelmandje openen",
     "nav.lang": "Taal",
@@ -20,7 +20,7 @@ const STRINGS = {
     "shop.added": "{name} zit in je mandje",
     "stock.soldOut": "Uitverkocht",
     "stock.max": "Er zijn er nog maar {n}",
-    "record.title": "De plaat",
+    "record.title": "Listening corner",
     "record.play": "Fragment van {title} beluisteren",
     "record.pause": "Fragment van {title} pauzeren",
     "record.previews": "Klik op een nummer voor een fragment van 45 seconden.",
@@ -47,7 +47,7 @@ const STRINGS = {
   },
   en: {
     "meta.description": "Tunnels and Mixed Feelings, the new record by Best Parts. Vinyl and merch.",
-    "nav.record": "The record",
+    "nav.record": "Listening corner",
     "nav.cart": "Cart",
     "nav.cartOpen": "Open cart",
     "nav.lang": "Language",
@@ -64,7 +64,7 @@ const STRINGS = {
     "shop.added": "{name} added to your cart",
     "stock.soldOut": "Sold out",
     "stock.max": "Only {n} available",
-    "record.title": "The record",
+    "record.title": "Listening corner",
     "record.play": "Play a preview of {title}",
     "record.pause": "Pause the preview of {title}",
     "record.previews": "Click a track for a 45-second preview.",
