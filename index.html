@@ -55,7 +55,7 @@
   <section class="shop" id="shop">
     <div class="shop-head">
       <h2>Shop</h2>
-      <p data-i18n="shop.note">Verzending in België of afhalen op een concert.</p>
+      <p data-i18n="shop.note">Verzending binnen België of gratis af te halen in Gent. Internationaal verzenden kan ook, de prijs hangt af van je land.</p>
     </div>
     <div id="products"></div>
   </section>
@@ -129,8 +129,12 @@
   <ul class="cart-items"></ul>
   <p class="cart-empty" data-i18n="cart.empty">Je mandje is nog leeg.</p>
   <div class="cart-foot">
+    <label class="delivery"><span data-i18n="cart.delivery">Levering</span>
+      <select class="delivery-select"></select>
+    </label>
+    <p class="pickup-note" data-i18n="cart.pickupNote" hidden>Na je bestelling spreken we via e-mail een moment af.</p>
     <div class="row"><span data-i18n="cart.subtotal">Subtotaal</span><span class="subtotal">€ 0</span></div>
-    <div class="row muted"><span data-i18n="cart.shipping">Verzending België</span><span class="shipping">€ 0</span></div>
+    <div class="row muted"><span class="shipping-label">Verzending</span><span class="shipping">€ 0</span></div>
     <div class="row total"><span data-i18n="cart.total">Totaal</span><span class="grand">€ 0</span></div>
     <button class="btn btn-red btn-block checkout" type="button" data-i18n="cart.checkout">Afrekenen</button>
     <p class="pay-note" data-i18n="cart.payNote">Betalen met Bancontact, je bankapp of kaart.</p>

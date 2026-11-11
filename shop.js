@@ -99,8 +99,15 @@ const PRODUCTS = [
   },
 ];
 
-const SHIPPING = 5; // verzending België per bestelling
-const FREE_FROM = 50; // gratis verzending vanaf dit bedrag
+// Levering: prijs per bestelling. Pas de bedragen hier aan.
+// "freeFrom" = gratis verzending vanaf dit bestelbedrag (alleen België).
+const DELIVERY = {
+  be: { price: 5, freeFrom: 50 },
+  pickup: { price: 0 },
+  near: { price: 12 }, // Nederland, Luxemburg, Duitsland, Frankrijk
+  europe: { price: 18 },
+  world: { price: 30 },
+};
 
 const euro = (n) => "€ " + (Number.isInteger(n) ? n : n.toFixed(2).replace(".", ","));
 const $ = (s) => document.querySelector(s);
@@ -110,6 +117,9 @@ const { t, L } = I18N;
 let cart = [];
 try { cart = JSON.parse(localStorage.getItem("bp-cart")) || []; } catch {}
 cart = cart.filter((l) => PRODUCTS.some((p) => p.id === l.id && !p.hidden)); // producten die niet meer bestaan weglaten
+let delivery = "be";
+try { delivery = localStorage.getItem("bp-delivery") || "be"; } catch {}
+if (!DELIVERY[delivery]) delivery = "be";
 const save = () => { try { localStorage.setItem("bp-cart", JSON.stringify(cart)); } catch {} };
 
 const product = (id) => PRODUCTS.find((p) => p.id === id);
@@ -236,7 +246,13 @@ zoomBox.addEventListener("close", renderProducts); // kaart toont dezelfde kant 
 function render() {
   const count = cart.reduce((n, l) => n + l.qty, 0);
   const subtotal = cart.reduce((n, l) => n + l.qty * product(l.id).price, 0);
-  const shipping = subtotal === 0 || subtotal >= FREE_FROM ? 0 : SHIPPING;
+  const d = DELIVERY[delivery];
+  const shipping = subtotal === 0 || (d.freeFrom && subtotal >= d.freeFrom) ? 0 : d.price;
+
+  $(".delivery-select").innerHTML = Object.entries(DELIVERY).map(([id, o]) =>
+    `<option value="${id}"${id === delivery ? " selected" : ""}>${t("delivery." + id, { price: euro(o.price), free: euro(o.freeFrom || 0) })}</option>`).join("");
+  $(".shipping-label").textContent = t(delivery === "pickup" ? "cart.pickupRow" : "cart.shipping");
+  $(".pickup-note").hidden = delivery !== "pickup";
 
   $(".cart-count").textContent = count;
   $(".cart-empty").hidden = count > 0;
@@ -266,6 +282,12 @@ function render() {
 $(".cart-items").addEventListener("click", (e) => {
   const b = e.target.closest("button[data-key]");
   if (b) changeQty(b.dataset.key, Number(b.dataset.d));
+});
+
+$(".delivery-select").addEventListener("change", (e) => {
+  delivery = e.target.value;
+  try { localStorage.setItem("bp-delivery", delivery); } catch {}
+  render();
 });
 
 // ---------- open / dicht ----------
