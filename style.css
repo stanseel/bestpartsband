@@ -152,7 +152,7 @@ body.cart-open { overflow: hidden; }
 .stage.red { background: var(--red); }
 .stage.photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
 .card:hover .stage.photo img { transform: scale(1.04); }
-.stage.orange { background: var(--grain), #c2d9e3; /* lichtblauw uit de lucht op de hoes */ background-blend-mode: soft-light, normal; }
+.stage.orange { background: var(--grain), #bc3400; background-blend-mode: soft-light, normal; }
 .stage.cream { background: var(--grain), #e3d9c6; background-blend-mode: multiply, normal; }
 
 /* uitverkocht */
