@@ -10,19 +10,19 @@ const lp = (cover, alt) =>
 
 // Getekend T-shirt met het echte drukbestand erop: achterkant (grote print) en voorkant (logo op de borst)
 const teeShape = "M232 52 L128 92 L28 222 L98 262 L152 196 C150 290 149 390 148 484 L452 484 C451 390 450 290 448 196 L502 262 L572 222 L472 92 L368 52";
-const tee = (side) => {
+const tee = (side, uid = "") => {
   const back = side === "back";
   const neck = back ? "Q300 80 232 52" : "Q300 132 232 52";
   return `<svg class="tee-view tee-${side}" viewBox="0 0 600 530" aria-hidden="true">
     <defs>
-      <linearGradient id="tee-fold-${side}" x1="0" x2="1">
+      <linearGradient id="tee-fold-${side}${uid}" x1="0" x2="1">
         <stop offset="0" stop-color="#000" stop-opacity=".07"/><stop offset=".12" stop-color="#000" stop-opacity="0"/>
         <stop offset=".88" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".07"/>
       </linearGradient>
     </defs>
     ${back ? "" : `<path d="M232 52 Q300 84 368 52 Q300 132 232 52Z" fill="#d9d2c0"/>`}
     <path d="${teeShape} ${neck}Z" fill="#f3eee2"/>
-    <path d="M152 196 C150 290 149 390 148 484 L452 484 C451 390 450 290 448 196Z" fill="url(#tee-fold-${side})"/>
+    <path d="M152 196 C150 290 149 390 148 484 L452 484 C451 390 450 290 448 196Z" fill="url(#tee-fold-${side}${uid})"/>
     <path d="M152 196 L128 92 M448 196 L472 92" stroke="#000" stroke-opacity=".08" stroke-width="2" fill="none"/>
     <path d="M38 209 L108 249 M562 209 L492 249 M149 470 L451 470" stroke="#000" stroke-opacity=".13" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
     <path d="M368 52 ${neck}" stroke="#e4ddcb" stroke-width="13" fill="none" stroke-linecap="round"/>
@@ -82,6 +82,7 @@ const PRODUCTS = [
       en: "Off-white T-shirt. Back: Best Parts, a horse with human legs, Balliamo piano stanotte, Italy tour twenty six. Front: small Best Parts logo on the chest.",
     },
     art: `<div class="tee">${tee("back")}${tee("front")}</div>`,
+    zoom: `<div class="tee">${tee("back", "-zoom")}${tee("front", "-zoom")}</div>`,
   },
   {
     id: "tote",
@@ -156,6 +157,7 @@ function card(p) {
   return `
     <article class="card${soldOut ? " sold-out" : ""}" data-id="${p.id}">
       <div class="stage ${p.stage}"${p.views ? ` data-view="${view[p.id] || p.views[0]}" role="img" aria-label="${L(p.alt)}"` : ""}>${p.art}${p.views ? `
+        ${p.zoom ? `<button class="zoom-btn" type="button" aria-label="${t("shop.zoom")}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6"/></svg></button>` : ""}
         <div class="views" role="group">${p.views.map((v) => `<button type="button" data-view="${v}" aria-pressed="${v === (view[p.id] || p.views[0])}">${t("shop." + v)}</button>`).join("")}</div>` : ""}</div>
       <div class="card-body">
         <h3>${L(p.name)}</h3>
@@ -196,12 +198,39 @@ function renderProducts() {
         card.querySelectorAll(".views button").forEach((x) => x.setAttribute("aria-pressed", x === b));
       })
     );
+    if (product(card.dataset.id).zoom) {
+      card.querySelector(".stage").addEventListener("click", (e) => {
+        if (!e.target.closest(".views")) openZoom(product(card.dataset.id));
+      });
+    }
     card.querySelector(".add").addEventListener("click", () => {
       const size = card.querySelector('.sizes [aria-pressed="true"]');
       add(card.dataset.id, size && size.textContent);
     });
   });
 }
+
+// ---------- grotere weergave ----------
+const zoomBox = $(".zoom");
+function openZoom(p) {
+  const current = view[p.id] || p.views[0];
+  zoomBox.innerHTML = `
+    <div class="stage ${p.stage} zoom-stage" data-view="${current}" role="img" aria-label="${L(p.alt)}">${p.zoom}
+      <div class="views" role="group">${p.views.map((v) => `<button type="button" data-view="${v}" aria-pressed="${v === current}">${t("shop." + v)}</button>`).join("")}</div>
+    </div>
+    <button class="zoom-close" type="button" aria-label="${t("cart.close")}">×</button>`;
+  zoomBox.querySelectorAll(".views button").forEach((b) =>
+    b.addEventListener("click", () => {
+      view[p.id] = b.dataset.view;
+      zoomBox.querySelector(".stage").dataset.view = b.dataset.view;
+      zoomBox.querySelectorAll(".views button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    })
+  );
+  zoomBox.querySelector(".zoom-close").addEventListener("click", () => zoomBox.close());
+  zoomBox.showModal();
+}
+zoomBox.addEventListener("click", (e) => e.target === zoomBox && zoomBox.close()); // klik naast het beeld sluit
+zoomBox.addEventListener("close", renderProducts); // kaart toont dezelfde kant als de grote weergave
 
 // ---------- mandje tonen ----------
 function render() {
