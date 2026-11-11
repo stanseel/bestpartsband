@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Best Parts — Voorraad</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background: var(--paper); }
+  .admin { max-width: 640px; margin: 0 auto; padding: 40px 16px 80px; }
+  .admin header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+  .admin .logo { color: var(--ink); }
+  .admin h1 { font-size: clamp(2.4rem, 8vw, 3.4rem); color: var(--red); margin-bottom: 8px; }
+  .intro { color: #555; line-height: 1.5; margin: 0 0 32px; }
+  .panel { background: var(--white); border-radius: 6px; padding: 24px; margin-bottom: 20px; }
+  .panel h2 { font-size: 1.4rem; margin-bottom: 12px; }
+  .panel p { line-height: 1.5; margin: 0 0 14px; }
+  .panel ol { line-height: 1.6; padding-left: 20px; margin: 0 0 16px; }
+  label { display: block; font-weight: 600; font-size: .9rem; margin-bottom: 6px; }
+  input[type="password"], input[type="number"] {
+    font: 500 1rem var(--body); width: 100%; padding: 12px 14px;
+    border: 1.5px solid #ccc; border-radius: 6px; background: var(--white); color: var(--ink);
+  }
+  input:focus { outline: 2px solid var(--sky); outline-offset: 1px; border-color: var(--sky); }
+  .row-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+  .btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid #bbb; }
+  .btn-ghost:hover { background: #eee; }
+
+  .item { display: grid; grid-template-columns: 72px 1fr; gap: 16px; padding: 20px 0; border-top: 1px solid #e5e0d8; }
+  .item:first-of-type { border-top: 0; padding-top: 4px; }
+  .item img { width: 72px; height: 72px; object-fit: cover; border-radius: 4px; }
+  .item h3 { font-size: 1.25rem; margin-bottom: 12px; letter-spacing: var(--kabel-tight); }
+  .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stepper { display: flex; gap: 6px; }
+  .stepper input { text-align: center; }
+  .stepper button {
+    flex: 0 0 44px; height: 46px; border-radius: 6px; border: 1.5px solid #ccc; background: var(--white);
+    font: 600 1.2rem var(--body); cursor: pointer; color: var(--ink);
+  }
+  .stepper button:hover { background: #eee; }
+  .hint { font-size: .82rem; color: #777; margin-top: 8px; }
+
+  .status { min-height: 1.4em; margin: 14px 0 0; font-weight: 500; }
+  .status.ok { color: #1c7a3c; }
+  .status.err { color: var(--red); }
+  .log { list-style: none; padding: 0; margin: 0; font-size: .9rem; }
+  .log li { padding: 8px 0; border-top: 1px solid #eee; display: flex; justify-content: space-between; gap: 12px; }
+  .log li:first-child { border-top: 0; }
+  .log time { color: #777; white-space: nowrap; }
+  [hidden] { display: none !important; }
+  @media (max-width: 480px) { .fields { grid-template-columns: 1fr; } .item { grid-template-columns: 56px 1fr; } .item img { width: 56px; height: 56px; } }
+</style>
+</head>
+<body>
+<div class="admin">
+  <header>
+    <a href="./" class="logo">Best<br>Parts</a>
+    <a href="./">Naar de shop →</a>
+  </header>
+
+  <h1>Voorraad</h1>
+  <p class="intro">Pas hier aan hoeveel platen er nog zijn. Na het opslaan staat het nieuwe aantal binnen een minuut of twee op de site.</p>
+
+  <!-- Stap 1: sleutel -->
+  <section class="panel" id="login" hidden>
+    <h2>Eerst aanmelden</h2>
+    <p>Deze pagina bewaart de voorraad in jullie GitHub-repository. Daarvoor heb je een sleutel nodig. Die maak je één keer per toestel:</p>
+    <ol>
+      <li>Ga naar <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com → nieuwe sleutel</a> (aangemeld als stanseel, of als iemand met toegang tot de repository).</li>
+      <li>Geef hem een naam, bv. "Voorraad shop", en kies een vervaldatum.</li>
+      <li>Kies bij <em>Repository access</em> "Only select repositories" en dan <strong>bestpartsband</strong>.</li>
+      <li>Zet bij <em>Permissions → Contents</em> de toegang op <strong>Read and write</strong>.</li>
+      <li>Klik op "Generate token" en plak de sleutel hieronder.</li>
+    </ol>
+    <label for="token">Sleutel</label>
+    <input id="token" type="password" autocomplete="off" placeholder="github_pat_…">
+    <div class="row-actions">
+      <button class="btn btn-red" id="save-token" type="button">Aanmelden</button>
+    </div>
+    <p class="hint">De sleutel blijft alleen op dit toestel bewaard. Hij kan enkel deze repository aanpassen.</p>
+    <p class="status" id="login-status" role="status"></p>
+  </section>
+
+  <!-- Stap 2: voorraad -->
+  <section class="panel" id="editor" hidden>
+    <div id="items"></div>
+    <div class="row-actions">
+      <button class="btn btn-red" id="save" type="button">Opslaan</button>
+      <button class="btn btn-ghost" id="reload" type="button">Opnieuw laden</button>
+    </div>
+    <p class="status" id="status" role="status"></p>
+  </section>
+
+  <section class="panel" id="history" hidden>
+    <h2>Laatste wijzigingen</h2>
+    <ul class="log" id="log"></ul>
+  </section>
+
+  <p><button class="btn btn-ghost" id="logout" type="button" hidden>Afmelden op dit toestel</button></p>
+</div>
+
+<script>
+const REPO = "stanseel/bestpartsband";
+const FILE = "stock.json";
+const API = `https://api.github.com/repos/${REPO}/contents/${FILE}`;
+const THUMBS = {
+  "lp-tmf": "img/cover-front.jpg",
+  "lp-montana": "img/cover-montana.jpg",
+  "lp-best-parts": "img/cover-best-parts.jpg",
+};
+
+const $ = (s) => document.querySelector(s);
+let token = "";
+try { token = localStorage.getItem("bp-admin-token") || ""; } catch {}
+let sha = null;
+let data = {};
+
+// GitHub bewaart bestanden in base64; zo blijven é en ë heel
+const decode = (b64) => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\n/g, "")), (c) => c.charCodeAt(0)));
+const encode = (str) => btoa(String.fromCharCode(...new TextEncoder().encode(str)));
+
+function gh(url, opts = {}) {
+  return fetch(url, {
+    ...opts,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+      ...(opts.headers || {}),
+    },
+    cache: "no-store",
+  });
+}
+
+function setStatus(el, msg, kind = "") {
+  el.textContent = msg;
+  el.className = "status " + kind;
+}
+
+function show(loggedIn) {
+  $("#login").hidden = loggedIn;
+  $("#editor").hidden = !loggedIn;
+  $("#history").hidden = !loggedIn;
+  $("#logout").hidden = !loggedIn;
+}
+
+async function load() {
+  setStatus($("#status"), "Laden…");
+  const r = await gh(API);
+  if (r.status === 401 || r.status === 403 || r.status === 404) {
+    show(false);
+    setStatus($("#login-status"), "Deze sleutel werkt niet (meer). Maak een nieuwe aan en probeer opnieuw.", "err");
+    return false;
+  }
+  if (!r.ok) { setStatus($("#status"), "Laden mislukt. Probeer het later opnieuw.", "err"); return false; }
+  const json = await r.json();
+  sha = json.sha;
+  data = JSON.parse(decode(json.content));
+  show(true);
+  renderItems();
+  setStatus($("#status"), "");
+  loadLog();
+  return true;
+}
+
+function renderItems() {
+  $("#items").innerHTML = Object.entries(data).map(([id, d]) => `
+    <div class="item" data-id="${id}">
+      <img src="${THUMBS[id] || ""}" alt="">
+      <div>
+        <h3>${d.name || id}</h3>
+        <div class="fields">
+          <div>
+            <label for="${id}-stock">Nog in voorraad</label>
+            <div class="stepper">
+              <button type="button" data-step="-1" aria-label="Eén minder">−</button>
+              <input id="${id}-stock" type="number" min="0" inputmode="numeric" value="${d.stock ?? ""}" data-field="stock">
+              <button type="button" data-step="1" aria-label="Eén meer">+</button>
+            </div>
+          </div>
+          <div>
+            <label for="${id}-edition">Oplage (ooit gemaakt)</label>
+            <input id="${id}-edition" type="number" min="0" inputmode="numeric" value="${d.edition ?? ""}" data-field="edition">
+          </div>
+        </div>
+        <p class="hint">Laat "Nog in voorraad" leeg om geen teller te tonen. Zet op 0 voor uitverkocht.</p>
+      </div>
+    </div>`).join("");
+}
+
+$("#items").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-step]");
+  if (!b) return;
+  const input = b.parentElement.querySelector("input");
+  const n = Math.max(0, (parseInt(input.value, 10) || 0) + Number(b.dataset.step));
+  input.value = n;
+});
+
+function collect() {
+  const next = structuredClone(data);
+  for (const item of document.querySelectorAll(".item")) {
+    const id = item.dataset.id;
+    for (const input of item.querySelectorAll("input[data-field]")) {
+      const v = input.value.trim();
+      next[id][input.dataset.field] = v === "" ? null : Math.max(0, parseInt(v, 10));
+    }
+    const { stock, edition } = next[id];
+    if (stock != null && edition != null && stock > edition) {
+      throw new Error(`${next[id].name}: er kunnen niet meer in voorraad zijn dan er gemaakt zijn.`);
+    }
+  }
+  return next;
+}
+
+function summary(before, after) {
+  const changes = Object.keys(after)
+    .filter((id) => before[id]?.stock !== after[id].stock || before[id]?.edition !== after[id].edition)
+    .map((id) => `${after[id].name} ${after[id].stock ?? "–"}${after[id].edition ? "/" + after[id].edition : ""}`);
+  return changes.length ? "Voorraad: " + changes.join(", ") : null;
+}
+
+$("#save").addEventListener("click", async () => {
+  let next;
+  try { next = collect(); } catch (err) { return setStatus($("#status"), err.message, "err"); }
+  const message = summary(data, next);
+  if (!message) return setStatus($("#status"), "Er is niets veranderd.");
+
+  $("#save").disabled = true;
+  setStatus($("#status"), "Opslaan…");
+  const r = await gh(API, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message, content: encode(JSON.stringify(next, null, 2) + "\n"), sha }),
+  });
+  $("#save").disabled = false;
+
+  if (r.status === 409 || r.status === 422) {
+    return setStatus($("#status"), "Iemand anders heeft net ook iets aangepast. Klik op ‘Opnieuw laden’ en probeer nog eens.", "err");
+  }
+  if (!r.ok) return setStatus($("#status"), "Opslaan mislukt. Controleer of je sleutel nog geldig is.", "err");
+
+  sha = (await r.json()).content.sha;
+  data = next;
+  setStatus($("#status"), "Opgeslagen. Binnen een minuut of twee staat het op de site.", "ok");
+  loadLog();
+});
+
+async function loadLog() {
+  const r = await gh(`https://api.github.com/repos/${REPO}/commits?path=${FILE}&per_page=6`);
+  if (!r.ok) return;
+  const commits = await r.json();
+  const fmt = new Intl.DateTimeFormat("nl-BE", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  $("#log").innerHTML = commits.map((c) => `
+    <li><span>${c.commit.message.split("\n")[0].replace(/</g, "&lt;")}</span>
+    <time>${fmt.format(new Date(c.commit.author.date))}</time></li>`).join("");
+}
+
+$("#reload").addEventListener("click", load);
+
+$("#save-token").addEventListener("click", async () => {
+  token = $("#token").value.trim();
+  if (!token) return setStatus($("#login-status"), "Plak eerst je sleutel.", "err");
+  setStatus($("#login-status"), "Even controleren…");
+  if (await load()) {
+    try { localStorage.setItem("bp-admin-token", token); } catch {}
+    $("#token").value = "";
+    setStatus($("#login-status"), "");
+  }
+});
+
+$("#logout").addEventListener("click", () => {
+  try { localStorage.removeItem("bp-admin-token"); } catch {}
+  token = "";
+  show(false);
+});
+
+if (token) load(); else show(false);
+</script>
+</body>
+</html>

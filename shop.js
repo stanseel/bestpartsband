@@ -2,7 +2,8 @@
 // Teksten die per taal verschillen staan als { nl: "...", en: "..." }.
 //
 // Voorraad bij de platen: "stock" is hoeveel er nog zijn, "edition" hoeveel er ooit gemaakt zijn.
-// Iets verkocht buiten de site (op een concert, via Bandcamp)? Verlaag "stock" hier.
+// De echte aantallen staan in stock.json en pas je aan via admin.html.
+// De getallen hieronder zijn alleen een reserve als stock.json niet laadt.
 // Zonder "stock" toont de site geen teller. Bij 0 staat de plaat op uitverkocht.
 const lp = (cover, alt) =>
   `<div class="lp"><div class="disc"></div><img src="${cover}" alt="${alt}"></div>`;
@@ -233,3 +234,19 @@ function toast(msg) {
 renderProducts();
 render();
 document.addEventListener("langchange", () => { renderProducts(); render(); });
+
+// Actuele voorraad uit stock.json (bijgehouden via admin.html)
+fetch("stock.json?t=" + Date.now(), { cache: "no-store" })
+  .then((r) => (r.ok ? r.json() : null))
+  .then((data) => {
+    if (!data) return;
+    PRODUCTS.forEach((p) => {
+      const d = data[p.id];
+      if (!d) return;
+      if ("stock" in d) p.stock = d.stock;
+      if ("edition" in d) p.edition = d.edition;
+    });
+    renderProducts();
+    render();
+  })
+  .catch(() => {});
