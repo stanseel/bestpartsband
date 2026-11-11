@@ -334,7 +334,7 @@ body.cart-open { overflow: hidden; }
 .booking-form input:focus-visible, .booking-form textarea:focus-visible { outline: 2.5px solid var(--white); outline-offset: 1px; border-color: var(--white); }
 .booking-form .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 .booking-foot { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-.booking-form .btn-red:focus-visible { outline-color: var(--white); }
+.booking-form .btn-ink:focus-visible { outline-color: var(--white); }
 .booking-form button:disabled { opacity: .6; cursor: default; transform: none; }
 .booking-status { margin: 0; font-size: .95rem; flex: 1; min-width: 200px; }
 .booking-form.sent > :not(.booking-foot), .booking-form.sent button { display: none; }
