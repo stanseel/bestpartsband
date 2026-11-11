@@ -8,6 +8,31 @@
 const lp = (cover, alt) =>
   `<div class="lp"><div class="disc"></div><img src="${cover}" alt="${alt}"></div>`;
 
+// Getekend T-shirt met het echte drukbestand erop: achterkant (grote print) en voorkant (logo op de borst)
+const teeShape = "M232 52 L128 92 L28 222 L98 262 L152 196 C150 290 149 390 148 484 L452 484 C451 390 450 290 448 196 L502 262 L572 222 L472 92 L368 52";
+const tee = (side) => {
+  const back = side === "back";
+  const neck = back ? "Q300 80 232 52" : "Q300 132 232 52";
+  return `<svg class="tee-view tee-${side}" viewBox="0 0 600 530" aria-hidden="true">
+    <defs>
+      <linearGradient id="tee-fold-${side}" x1="0" x2="1">
+        <stop offset="0" stop-color="#000" stop-opacity=".07"/><stop offset=".12" stop-color="#000" stop-opacity="0"/>
+        <stop offset=".88" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".07"/>
+      </linearGradient>
+    </defs>
+    ${back ? "" : `<path d="M232 52 Q300 84 368 52 Q300 132 232 52Z" fill="#d9d2c0"/>`}
+    <path d="${teeShape} ${neck}Z" fill="#f3eee2"/>
+    <path d="M152 196 C150 290 149 390 148 484 L452 484 C451 390 450 290 448 196Z" fill="url(#tee-fold-${side})"/>
+    <path d="M152 196 L128 92 M448 196 L472 92" stroke="#000" stroke-opacity=".08" stroke-width="2" fill="none"/>
+    <path d="M38 209 L108 249 M562 209 L492 249 M149 470 L451 470" stroke="#000" stroke-opacity=".13" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+    <path d="M368 52 ${neck}" stroke="#e4ddcb" stroke-width="13" fill="none" stroke-linecap="round"/>
+    <path d="M368 52 ${neck}" stroke="#000" stroke-opacity=".12" stroke-width="1.5" fill="none" transform="translate(0 7)"/>
+    ${back
+      ? `<image href="img/tee-print-back.png" x="203" y="128" width="194" height="274"/>`
+      : `<image href="img/tee-print-front.png" x="352" y="168" width="76" height="57"/>`}
+  </svg>`;
+};
+
 const PRODUCTS = [
   {
     id: "lp-tmf",
@@ -45,12 +70,18 @@ const PRODUCTS = [
   {
     id: "tee-italy",
     name: { nl: "Italy Tour T-shirt", en: "Italy Tour T-shirt" },
-    sub: { nl: "Ecru, zwarte print op de rug", en: "Off-white, black print on the back" },
+    sub: { nl: "Ecru · logo vooraan, grote print op de rug", en: "Off-white · logo on the front, large print on the back" },
     price: 25,
     sizes: ["S", "M", "L", "XL", "XXL"],
-    stage: "photo",
-    thumb: "img/tee-italy-thumb.jpg",
-    art: `<img src="img/tee-italy.jpg" alt="Achterkant van het T-shirt: Best Parts, een paard met mensenbenen, Balliamo piano stanotte, Italy tour twenty six">`,
+    stage: "red",
+    thumb: "img/tee-print-back.png",
+    thumbFit: true,
+    views: ["back", "front"],
+    alt: {
+      nl: "Ecru T-shirt. Achterkant: Best Parts, een paard met mensenbenen, Balliamo piano stanotte, Italy tour twenty six. Voorkant: klein Best Parts-logo op de borst.",
+      en: "Off-white T-shirt. Back: Best Parts, a horse with human legs, Balliamo piano stanotte, Italy tour twenty six. Front: small Best Parts logo on the chest.",
+    },
+    art: `<div class="tee">${tee("back")}${tee("front")}</div>`,
   },
   {
     id: "tote",
@@ -118,11 +149,14 @@ function stockBadge(p) {
   return `<p class="sold-out-note">${t("stock.soldOut")}</p>`;
 }
 
+const view = {}; // welke kant van het T-shirt getoond wordt
+
 function card(p) {
   const soldOut = hasStock(p) && p.stock === 0;
   return `
     <article class="card${soldOut ? " sold-out" : ""}" data-id="${p.id}">
-      <div class="stage ${p.stage}">${p.art}</div>
+      <div class="stage ${p.stage}"${p.views ? ` data-view="${view[p.id] || p.views[0]}" role="img" aria-label="${L(p.alt)}"` : ""}>${p.art}${p.views ? `
+        <div class="views" role="group">${p.views.map((v) => `<button type="button" data-view="${v}" aria-pressed="${v === (view[p.id] || p.views[0])}">${t("shop." + v)}</button>`).join("")}</div>` : ""}</div>
       <div class="card-body">
         <h3>${L(p.name)}</h3>
         <p class="sub">${L(p.sub)}</p>
@@ -155,6 +189,13 @@ function renderProducts() {
         card.querySelectorAll(".sizes button").forEach((x) => x.setAttribute("aria-pressed", x === b));
       })
     );
+    card.querySelectorAll(".views button").forEach((b) =>
+      b.addEventListener("click", () => {
+        view[card.dataset.id] = b.dataset.view;
+        card.querySelector(".stage").dataset.view = b.dataset.view;
+        card.querySelectorAll(".views button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+      })
+    );
     card.querySelector(".add").addEventListener("click", () => {
       const size = card.querySelector('.sizes [aria-pressed="true"]');
       add(card.dataset.id, size && size.textContent);
@@ -178,7 +219,7 @@ function render() {
   $(".cart-items").innerHTML = cart.map((l) => {
     const p = product(l.id);
     return `<li>
-      <div class="thumb"><img src="${p.thumb}" alt=""></div>
+      <div class="thumb${p.thumbFit ? " fit" : ""}"><img src="${p.thumb}" alt=""></div>
       <div>
         <div class="name">${L(p.name)}</div>
         <div class="meta">${L(p.sub).split(" · ")[0]}${l.size ? " · " + t("cart.size") + " " + l.size : ""}</div>
