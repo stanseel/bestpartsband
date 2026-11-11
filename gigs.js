@@ -1,6 +1,7 @@
 // Gedane optredens, overgenomen van songkick.com/artists/10209042-best-parts/gigography
 // Nieuw optreden? Voeg bovenaan een regel toe.
 const GIGS = [
+  ["2026-10-24", "Vierberg", "Westouter", "BE"],
   ["2026-06-10", "Café De Loge", { nl: "Gent", en: "Ghent" }, "BE"],
   ["2026-05-16", "Tracks & Travellers", "Knokke-Heist", "BE"],
   ["2026-04-14", "Empiria", { nl: "Genua", en: "Genoa" }, "IT"],
