@@ -202,7 +202,6 @@ body.cart-open { overflow: hidden; }
 .ink { filter: grayscale(1) brightness(4.5) contrast(3); mix-blend-mode: multiply; }
 
 /* T-shirt: achterkant en voorkant liggen op elkaar, de knoppen onderaan wisselen */
-.stage.red { background: var(--grain), var(--red); background-blend-mode: soft-light, normal; }
 .tee { position: relative; width: 96%; aspect-ratio: 600 / 530; margin-top: -8%; }
 .tee-view {
   position: absolute; inset: 0; width: 100%; height: 100%;
