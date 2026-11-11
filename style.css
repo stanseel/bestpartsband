@@ -177,6 +177,11 @@ body.cart-open { overflow: hidden; }
 .sizes button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--white); }
 .card .add { flex: 1; padding: 13px 18px; }
 
+/* het label van de plaat neemt de kleur van de hoes over */
+.stage.blue { --label: #0763a1; }
+.stage.orange { --label: #ee5b18; }
+.stage.cream { --label: #eee6d9; }
+
 /* product mockups */
 .lp { position: relative; width: 70%; aspect-ratio: 1; transition: transform .4s ease; }
 .lp .disc {
@@ -187,7 +192,7 @@ body.cart-open { overflow: hidden; }
 }
 .lp .disc::after {
   content: ""; position: absolute; inset: 34%; border-radius: 50%;
-  background: radial-gradient(circle, var(--ink) 0 5%, var(--red) 6%);
+  background: radial-gradient(circle, var(--ink) 0 5%, var(--label, var(--red)) 6%);
 }
 .lp img { position: relative; width: 100%; aspect-ratio: 1; box-shadow: 0 20px 40px -12px rgba(0,0,0,.5); }
 .card:hover .lp { transform: translateX(-10%); }
