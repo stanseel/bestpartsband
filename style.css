@@ -131,7 +131,7 @@ body.cart-open { overflow: hidden; }
 .sleeve {
   display: block; width: 100%; max-width: min(760px, 100svh - 200px); margin-left: auto; aspect-ratio: 1;
   padding: 0; border: 0; background: none; cursor: pointer;
-  container-type: inline-size; perspective: 1600px;
+  container-type: inline-size; perspective: 5000px;
   filter: drop-shadow(0 34px 34px rgba(0, 10, 40, .45));
   animation: float 7s ease-in-out infinite;
   -webkit-tap-highlight-color: transparent;
