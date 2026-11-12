@@ -4,7 +4,7 @@
   if (!sleeve) return;
   const box = sleeve.querySelector(".sleeve-box");
   const hint = document.querySelector(".sleeve-hint");
-  const REST = 20; // rusthoek, zodat de rode rug zichtbaar blijft
+  const REST = 12; // rusthoek, zodat de rode rug zichtbaar blijft
   let turns = 0, mx = 0, my = 0;
 
   function apply() {
