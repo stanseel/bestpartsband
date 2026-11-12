@@ -47,7 +47,15 @@
       <a href="#shop" class="btn btn-red" data-i18n="hero.cta">Naar de shop</a>
     </div>
     <div class="hero-art">
-      <img src="img/cover-front.jpg" width="990" height="990" fetchpriority="high" data-i18n-alt="hero.alt" alt="Hoes van Tunnels and Mixed Feelings: een rode trein rijdt door een blauwe berg die in de lucht zweeft">
+      <button class="sleeve" type="button" aria-pressed="false" aria-label="Draai de hoes om" data-i18n-label="hero.flip">
+        <span class="sleeve-box">
+          <img class="sleeve-front" src="img/cover-front.jpg" width="1400" height="1400" fetchpriority="high" data-i18n-alt="hero.alt" alt="Hoes van Tunnels and Mixed Feelings: een rode trein rijdt door een blauwe berg die in de lucht zweeft">
+          <img class="sleeve-back" src="img/cover-back.jpg" width="1400" height="1400" data-i18n-alt="hero.altBack" alt="Achterkant van de hoes: een blauwe boog boven een woestijnweg, met de zes songtitels">
+          <img class="sleeve-spine" src="img/cover-spine.jpg" width="27" height="1400" alt="">
+          <span class="sleeve-open"></span><span class="sleeve-top"></span><span class="sleeve-bottom"></span>
+        </span>
+      </button>
+      <p class="sleeve-hint" data-i18n="hero.hint">Klik om de hoes te draaien</p>
     </div>
   </section>
 
@@ -150,5 +158,6 @@
 <script src="gigs.js"></script>
 <script src="player.js"></script>
 <script src="booking.js"></script>
+<script src="sleeve.js"></script>
 </body>
 </html>

@@ -127,12 +127,41 @@ body.cart-open { overflow: hidden; }
 .hero h1 { font-size: clamp(3rem, 7vw, 7rem); }
 .lead { font-size: clamp(1.05rem, 1.6vw, 1.25rem); line-height: 1.5; max-width: 34ch; margin: 28px 0 36px; opacity: .92; }
 .hero-art { position: relative; }
-.hero-art img {
-  width: 100%; max-width: min(760px, 100svh - 200px); margin-left: auto; aspect-ratio: 1;
-  box-shadow: 0 40px 80px -20px rgba(0, 10, 40, .55);
+/* Hoes als 3D-doosje: voorkant, achterkant, rode rug van 6 mm en de open randen */
+.sleeve {
+  display: block; width: 100%; max-width: min(760px, 100svh - 200px); margin-left: auto; aspect-ratio: 1;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  container-type: inline-size; perspective: 1600px;
+  filter: drop-shadow(0 34px 34px rgba(0, 10, 40, .45));
   animation: float 7s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
 }
-@keyframes float { 50% { transform: translateY(-14px) rotate(-.6deg); } }
+.sleeve-box {
+  --t: 1.9cqw; /* 6 mm op een hoes van 315 mm */
+  position: relative; display: block; width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 20deg));
+  transition: transform 1.1s cubic-bezier(.3, .9, .3, 1);
+}
+.sleeve.tilting .sleeve-box { transition-duration: .25s; }
+.sleeve-box > * { position: absolute; display: block; backface-visibility: hidden; }
+.sleeve-front, .sleeve-back { inset: 0; width: 100%; height: 100%; }
+.sleeve-front { transform: translateZ(calc(var(--t) / 2)); }
+.sleeve-back { transform: rotateY(180deg) translateZ(calc(var(--t) / 2)); }
+.sleeve-spine, .sleeve-open { top: 0; left: calc(50% - var(--t) / 2); width: var(--t); height: 100%; }
+.sleeve-spine { transform: rotateY(-90deg) translateZ(50cqw); }
+.sleeve-open { transform: rotateY(90deg) translateZ(50cqw); }
+.sleeve-top, .sleeve-bottom { left: 0; top: calc(50% - var(--t) / 2); width: 100%; height: var(--t); }
+.sleeve-top { transform: rotateX(90deg) translateZ(50cqw); }
+.sleeve-bottom { transform: rotateX(-90deg) translateZ(50cqw); }
+/* open randen: twee kartonnen flappen met een donkere spleet ertussen */
+.sleeve-open { background: linear-gradient(90deg, #e9e2d3 0 38%, #2a2622 38% 62%, #e9e2d3 62%); }
+.sleeve-top, .sleeve-bottom { background: linear-gradient(180deg, #e9e2d3 0 38%, #2a2622 38% 62%, #e9e2d3 62%); }
+.sleeve:focus-visible { outline: none; }
+.sleeve:focus-visible .sleeve-front, .sleeve:focus-visible .sleeve-back { outline: 3px solid var(--white); outline-offset: 4px; }
+.sleeve-hint { margin: 22px 0 0; text-align: right; font-size: .8rem; letter-spacing: .04em; opacity: .7; transition: opacity .4s; }
+.sleeve-hint.done { opacity: 0; }
+@keyframes float { 50% { transform: translateY(-14px); } }
 
 /* ---------- shop ---------- */
 .shop { padding: clamp(64px, 9vw, 120px) var(--gutter); }
@@ -415,7 +444,8 @@ body.cart-open { overflow: hidden; }
   .top { padding-top: 20px; }
   .top nav a { display: none; }
   .hero { grid-template-columns: 1fr; padding-top: 120px; gap: 40px; min-height: 0; }
-  .hero-art img { max-width: 520px; margin: 0 auto; }
+  .sleeve { max-width: 520px; margin: 0 auto; }
+  .sleeve-hint { text-align: center; }
   .hero-text { text-align: center; }
   .hero .lead { margin-left: auto; margin-right: auto; }
   .record { grid-template-columns: 1fr; }
