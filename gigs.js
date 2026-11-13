@@ -21,7 +21,7 @@ const GIGS = [
   ["2024-06-01", "'t Kruisken", "Belsele", "BE"],
   ["2023-10-14", "Café De Afzakkerij", "Veghel", "NL"],
   ["2023-05-11", "Birg", { nl: "Gent", en: "Ghent" }, "BE"],
-  ["2023-04-28", "De Kreun", "Kortrijk", "BE"],
+  ["2023-04-28", "De Kreun", "Kortrijk", "BE", { nl: "met De Portables", en: "with De Portables" }],
   ["2023-04-20", "De Snuffel", { nl: "Brugge", en: "Bruges" }, "BE"],
   ["2022-10-04", "Villa Anamma", { nl: "Gent", en: "Ghent" }, "BE"],
   ["2022-08-27", { nl: "Privé-event", en: "Private event" }, "Bergen op Zoom", "NL", { nl: "georganiseerd door The Collectors Gilze", en: "organised by The Collectors Gilze" }],
