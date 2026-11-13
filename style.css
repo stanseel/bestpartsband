@@ -378,7 +378,7 @@ body.cart-open { overflow: hidden; }
 /* ---------- footer ---------- */
 .foot {
   background: var(--ink); color: var(--white);
-  display: flex; justify-content: space-between; align-items: flex-start; gap: 32px; flex-wrap: wrap;
+  display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap;
   padding: 56px var(--gutter);
   font-size: .92rem;
 }
