@@ -23,7 +23,7 @@ const GIGS = [
   ["2023-05-11", "Birg", { nl: "Gent", en: "Ghent" }, "BE"],
   ["2023-04-28", "De Kreun", "Kortrijk", "BE"],
   ["2023-04-20", "De Snuffel", { nl: "Brugge", en: "Bruges" }, "BE"],
-  ["2022-10-04", "", { nl: "Gent", en: "Ghent" }, "BE"],
+  ["2022-10-04", "Villa Anamma", { nl: "Gent", en: "Ghent" }, "BE"],
   ["2022-08-27", "", "Bergen op Zoom", "NL"],
   ["2022-07-06", "Secret Garden Sessions", "Kortemark", "BE"],
   ["2022-06-04", "Muziekodroom", "Hasselt", "BE", { nl: "met Fence, The Yummy Mouths e.a.", en: "with Fence, The Yummy Mouths and others" }],
