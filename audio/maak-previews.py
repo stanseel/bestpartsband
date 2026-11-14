@@ -1,7 +1,7 @@
 import sys, wave, glob, os, re, subprocess
 src_dir, tmp_dir, out_dir = sys.argv[1:4]
 LENGTH, FADE_IN, FADE_OUT = 45.0, 0.5, 3.0
-STARTS = {"02": 120.0, "04": 75.0}  # startpunt in seconden per nummer; de rest begint op 0:30
+STARTS = {"02": 120.0, "04": 135.0}  # startpunt in seconden per nummer; de rest begint op 0:30
 for path in sorted(glob.glob(os.path.join(src_dir, "*.wav"))):
     m = re.match(r"(\d\d)_Best Parts_(.+?) - \[", os.path.basename(path))
     num, title = m.group(1), m.group(2)
